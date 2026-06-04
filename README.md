@@ -6,7 +6,7 @@ A classic Snake game built with Vanilla JavaScript, HTML5, and CSS
 ## 📌 Projektübersicht
 Ein vollständig im Browser spielbarer Klon des Arcade-Klassikers "Snake". Dieses Projekt wurde entwickelt, um fortgeschrittene Konzepte in JavaScript (DOM-Manipulation, Event-Listener, Game-Loop) und HTML5-Canvas in der Praxis anzuwenden.
 
-🎮 **[HIER KLICKEN, UM DAS SPIEL DIREKT IM BROWSER ZU SPIELEN] (Hier deinen GitHub Pages Link einfügen)**
+🎮 **[HIER KLICKEN, UM DAS SPIEL DIREKT IM BROWSER ZU SPIELEN] ()**
 
 ---
 
