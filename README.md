@@ -13,8 +13,8 @@ Ein vollständig im Browser spielbarer Klon des Arcade-Klassikers "Snake". Diese
 ## 🛠️ Tech-Stack & Fähigkeiten
 Dieses Projekt wurde komplett ohne externe Frameworks oder Bibliotheken (Zero Dependencies) geschrieben:
 *   **Logik:** Vanilla JavaScript (ES6+)
-*   **Struktur:** HTML5 
-*   **Design:** CSS3 (Flexbox/Grid für sauberes Layout)
+*   **Struktur:** HTML
+*   **Design:** CSS
 
 ## 💡 Technische Highlights im Code
 *   **Game Loop:** Implementierung einer flüssigen Render-Schleife (z. B. via `requestAnimationFrame` oder `setInterval`).
