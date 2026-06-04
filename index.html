@@ -29,146 +29,142 @@
     <script>
         let canvas = document.getElementById('canvas');
         let ctx = canvas.getContext('2d');
-        let rows = 12;
-        let cols = 16;
-        let snake = [{
-            x: 13,
-            y:5
-        }];
+let rows = 12;
+let cols = 16;
+let snake = [{
+    x: 13,
+    y: 5
+}];
 
-        let food;
-        let Punkte = 0;
+let food;
+let Punkte = 0;
 
-        let cellWidth = canvas.width / cols;
-        let cellHeight = canvas.height / rows;
-        let direction = 'LEFT';
-        let foodCollected = false;
+let cellWidth = canvas.width / cols;
+let cellHeight = canvas.height / rows;
+let direction = 'LEFT';
+let foodCollected = false;
 
+placeFood();
 
+setInterval(gameLoop, 350);
+document.addEventListener('keydown', keyDown);
+
+draw();
+
+function draw() {
+    ctx.fillStyle = '#232933';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#297AE3';
+
+    drawBorder();
+    
+    snake.forEach(part => add(part.x, part.y));
+
+    ctx.fillStyle = 'green';
+    add(food.x, food.y);
+    
+    requestAnimationFrame(draw);
+}
+
+function add(x, y) {
+    ctx.fillRect(x * cellWidth, y * cellHeight, 30 - 1, 30 - 1);
+}
+
+function placeFood() {
+    let randomx = Math.floor(Math.random() * cols);
+    let randomy = Math.floor(Math.random() * rows);
+
+    food = {
+        x: randomx,
+        y: randomy
+    };
+}
+
+function drawBorder() {
+    ctx.strokeStyle = '#2E3744'; 
+    ctx.lineWidth = 4; 
+    ctx.strokeRect(0, 0, canvas.width, canvas.height); 
+}
+
+function shiftSnake() {
+    for (let i = snake.length - 1; i > 0; i--) {
+        const part = snake[i];
+        const lastPart = snake[i - 1];
+        part.x = lastPart.x;
+        part.y = lastPart.y;
+    }
+}
+
+function gameLoop() {
+    shiftSnake();
+    if (foodCollected) {
+        snake = [{
+            x: snake[0].x,
+            y: snake[0].y,
+        }, ...snake];
+        Punkte += 5;
+        document.getElementById("SpielerPunkte").innerHTML = Punkte;
+        foodCollected = false;
+    }
+
+    let nextX = snake[0].x;
+    let nextY = snake[0].y;
+
+    if (direction == 'LEFT') {
+        nextX--;
+    }
+    if (direction == 'RIGHT') {
+        nextX++;
+    }
+    if (direction == 'UP') {
+        nextY--;
+    }
+    if (direction == 'DOWN') {
+        nextY++;
+    }
+
+    // Kollisionserkennung für die Spielfeldränder (Neustart bei Berührung)
+    if (nextX < 0 || nextX >= cols || nextY < 0 || nextY >= rows) {
+        resetGame();
+        return; // Beendet die Funktion vorzeitig
+    }
+
+    snake[0].x = nextX;
+    snake[0].y = nextY;
+
+    if (snake[0].x == food.x && snake[0].y == food.y) {
+        foodCollected = true;
         placeFood();
+    }
+}
 
-        setInterval(gameLoop, 350);
-        document.addEventListener('keydown', keyDown);
+// Neue Funktion für den Neustart
+function resetGame() {
+    snake = [{
+        x: 13,
+        y: 5
+    }];
+    direction = 'LEFT';
+    Punkte = 0;
+    document.getElementById("SpielerPunkte").innerHTML = Punkte;
+    foodCollected = false;
+    placeFood();
+}
 
-        draw();
-
-        function draw(){
-            ctx.fillStyle = '#232933';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#297AE3';
-
-            drawBorder();
-            
-            snake.forEach(part => add(part.x, part.y));
-
-            ctx.fillStyle = 'green';
-            add(food.x, food.y);
-            
-            requestAnimationFrame(draw);
-
-        }
-
-        function add(x, y) {
-            ctx.fillRect(x * cellWidth, y * cellHeight, 30 - 1, 30 - 1);
-        }
-
-        function placeFood(){
-            let randomx = Math.floor(Math.random() * cols);
-            let randomy = Math.floor(Math.random() * rows);
-
-            food ={
-                x: randomx,
-                y: randomy
-            };
-        }
-
-        function drawBorder(){
-            ctx.strokeStyle = '#2E3744'; 
-            ctx.lineWidth = 4; 
-            ctx.strokeRect(0, 0, canvas.width, canvas.height); 
-        }
-
-        function shiftSnake(){
-            for (let i = snake.length - 1; i > 0; i--) {
-                const part = snake[i];
-                const lastPart = snake[i - 1];
-                part.x = lastPart.x;
-                part.y = lastPart.y;
-            }
-        }
-
-        function gameLoop(){
-            shiftSnake();
-            if(foodCollected) {
-                snake = [{
-                    x: snake[0].x,
-                    y: snake[0].y,
-                }, ...snake];
-                Punkte += 5;
-                document.getElementById("SpielerPunkte").innerHTML = Punkte;
-                foodCollected = false;
-            }
-
-            let nextX = snake[0].x;
-            let nextY = snake[0].y;
-
-            if (direction == 'LEFT') {
-                nextX--;
-            }
-            if (direction == 'RIGHT') {
-                nextX++;
-            }
-            if (direction == 'UP') {
-                nextY--;
-            }
-            if (direction == 'DOWN') {
-                nextY++;
-            }
-        
-            // Kollisionserkennung für die Spielfeldränder
-            if (nextX < 0) { 
-                nextX = 0;
-            }
-            if (nextX >= cols) { 
-                nextX = cols - 1;
-            }
-            if (nextY < 0) { 
-                nextY = 0;
-            }
-            if (nextY >= rows) { 
-                nextY = rows - 1;
-            }
-        
-            
-            snake[0].x = nextX;
-            snake[0].y = nextY;
-
-            if  (snake[0].x == food.x &&
-                snake[0].y == food.y)    {
-                    foodCollected = true;
-
-                    placeFood();
-            }
-            
-            
-        }
-
-        
-
-        function keyDown(e) {
-            if (e.keyCode == 37) {
-                direction = 'LEFT'
-            }
-            if (e.keyCode == 38) {
-                direction = 'UP'
-            }
-            if (e.keyCode == 39) {
-                direction = 'RIGHT'
-            }
-            if (e.keyCode == 40) {
-                direction = 'DOWN'
-            }
-        }
+function keyDown(e) {
+    if (e.keyCode == 37) {
+        direction = 'LEFT';
+    }
+    if (e.keyCode == 38) {
+        direction = 'UP';
+    }
+    if (e.keyCode == 39) {
+        direction = 'RIGHT';
+    }
+    if (e.keyCode == 40) {
+        direction = 'DOWN';
+    }
+}
 
     </script>
     
